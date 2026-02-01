@@ -26,6 +26,7 @@ IPTV Stream Tester is a powerful Python-based tool designed to validate and moni
 - 🔁 **Loop Testing** - Single run, loop X times, or infinite loop modes
 - 🎬 **Resolution Detection** - Automatic 720p, 1080p, and 4K detection with icons
 - 📈 **Cumulative Metrics** - Track buffering and disconnects across all loop iterations
+- 🌐 **External M3U Links** - Load playlists from URLs or local files
 - ⏱️ **Total Time Tracking** - Cumulative time display from initial start
 - 🌓 **Dark Mode** - Toggle between light and dark themes
 - 🔍 **Channel Selection UI** - Interactive GUI with group filtering and search
@@ -115,12 +116,16 @@ pip install -r requirements.txt
 ### Basic Usage
 
 ```bash
-python run_local_test.py <path_to_m3u_file>
+python run_local_test.py <path_to_m3u_file_or_url>
 ```
 
-**Example:**
+**Examples:**
 ```bash
+# Local M3U file
 python run_local_test.py data/test_sample.m3u
+
+# External M3U URL
+python run_local_test.py https://example.com/playlist.m3u8
 ```
 
 ### Interactive Channel Selection

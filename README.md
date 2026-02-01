@@ -128,7 +128,7 @@ python run_local_test.py data/test_sample.m3u
 When you run the script, a GUI window will appear:
 
 1. **Select Channels** - Choose channels from groups or search by name
-2. **Set Duration** - Enter test duration (default: 15 seconds)
+2. **Set Duration** - Enter test duration (e.g., 15 seconds, 5 minutes, 1 hour)
 3. **Choose Loop Mode**:
    - Single Run
    - Loop X Times (specify iterations)
@@ -174,7 +174,7 @@ HTTP_PORT = 9001  # Change to your preferred port
 ### Test Duration
 
 - **Minimum**: 1 second
-- **Maximum**: 999 seconds
+- **Maximum**: No hard limit (can use days/hours/minutes/seconds units)
 - **Default**: 15 seconds
 
 ### Loop Iterations

@@ -152,14 +152,16 @@ Press `Ctrl+C` in the terminal to stop the test runner.
 
 ### M3U File Format
 
-Your M3U playlist should follow the standard format:
+Your M3U playlist should follow the standard format. The URLs can be any stream format that ffprobe supports (HLS .m3u8, direct .ts, RTSP, HTTP streams, etc.):
 
 ```m3u
 #EXTM3U
 #EXTINF:-1 tvg-id="channel1" tvg-name="Channel Name" tvg-logo="logo.png" group-title="Group",Channel Name
 https://stream.example.com/channel1/playlist.m3u8
 #EXTINF:-1 tvg-id="channel2" tvg-name="Another Channel" group-title="Group",Another Channel
-https://stream.example.com/channel2/playlist.m3u8
+http://stream.example.com/live/channel2.ts
+#EXTINF:-1 tvg-id="channel3" tvg-name="RTSP Stream" group-title="Group",RTSP Stream
+rtsp://stream.example.com:554/live/channel3
 ```
 
 ### Port Configuration

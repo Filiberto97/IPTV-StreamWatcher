@@ -1,0 +1,51 @@
+import aiosqlite
+from .config import DB_FILE
+
+CREATE_CHANNELS = '''
+CREATE TABLE IF NOT EXISTS channels (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  url TEXT NOT NULL,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+'''
+
+CREATE_RESULTS = '''
+CREATE TABLE IF NOT EXISTS results (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  channel_id INTEGER NOT NULL,
+  timestamp TEXT DEFAULT (datetime('now')),
+  result TEXT,
+  notes TEXT,
+  throughput_mbps REAL,
+  startup_estimate_s REAL,
+  FOREIGN KEY(channel_id) REFERENCES channels(id)
+);
+'''
+
+async def init_db():
+    async with aiosqlite.connect(DB_FILE) as db:
+        await db.execute(CREATE_CHANNELS)
+        await db.execute(CREATE_RESULTS)
+        await db.commit()
+
+async def add_channel(name, url):
+    async with aiosqlite.connect(DB_FILE) as db:
+        await db.execute('INSERT INTO channels (name, url) VALUES (?,?)', (name, url))
+        await db.commit()
+
+async def list_channels():
+    async with aiosqlite.connect(DB_FILE) as db:
+        cur = await db.execute('SELECT id, name, url FROM channels')
+        rows = await cur.fetchall()
+        return rows
+
+async def insert_result(channel_id, result, notes='', throughput=None, startup=None):
+    async with aiosqlite.connect(DB_FILE) as db:
+        await db.execute('INSERT INTO results (channel_id, result, notes, throughput_mbps, startup_estimate_s) VALUES (?,?,?,?,?)', (channel_id, result, notes, throughput, startup))
+        await db.commit()
+
+async def recent_results(channel_id, window_hours=24):
+    async with aiosqlite.connect(DB_FILE) as db:
+        cur = await db.execute('SELECT timestamp, result, notes, throughput_mbps, startup_estimate_s FROM results WHERE channel_id=? AND timestamp >= datetime("now", ?)', (channel_id, f'-{window_hours} hours'))
+        return await cur.fetchall()

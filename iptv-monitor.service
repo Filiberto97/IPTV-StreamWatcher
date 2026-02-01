@@ -1,0 +1,11 @@
+[Unit]
+Description=IPTV Monitor (user-level)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/YOURUSER/.venv/bin/python -m iptv_monitor.main
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

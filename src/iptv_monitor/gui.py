@@ -21,9 +21,12 @@ class MainWindow(Gtk.Window):
 
         start_btn = Gtk.Button(label='Start Monitor')
         stop_btn = Gtk.Button(label='Stop Monitor')
+        import_btn = Gtk.Button(label='Import M3U')
         start_btn.connect('clicked', self.on_start)
         stop_btn.connect('clicked', self.on_stop)
+        import_btn.connect('clicked', self.on_import)
         header.pack_start(start_btn)
+        header.pack_start(import_btn)
         header.pack_end(stop_btn)
 
         grid = Gtk.Grid()
@@ -69,6 +72,56 @@ class MainWindow(Gtk.Window):
         refresh_btn = Gtk.Button(label='Refresh')
         refresh_btn.connect('clicked', lambda b: asyncio.run_coroutine_threadsafe(self.load_data(), self.loop))
         vright.pack_start(refresh_btn, False, False, 0)
+
+    def on_import(self, _):
+        dialog = Gtk.Dialog(title='Import M3U', transient_for=self, flags=0)
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK)
+        box = dialog.get_content_area()
+        box.set_spacing(6)
+        entry = Gtk.Entry(); entry.set_placeholder_text('https://example.com/playlist.m3u')
+        box.add(Gtk.Label(label='Paste M3U URL below:'))
+        box.add(entry)
+        dialog.show_all()
+        resp = dialog.run()
+        url = entry.get_text().strip()
+        dialog.destroy()
+        if resp == Gtk.ResponseType.OK and url:
+            future = asyncio.run_coroutine_threadsafe(self._import_and_run(url), self.loop)
+            # show a small waiting dialog
+            wait = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE, 'Importing...')
+            wait.show_all()
+            try:
+                results, imported = future.result(timeout=120)
+            except Exception as e:
+                wait.destroy()
+                err = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, f'Import failed: {e}')
+                err.run(); err.destroy()
+                return
+            wait.destroy()
+            # refresh UI
+            asyncio.run_coroutine_threadsafe(self.load_data(), self.loop)
+            # show summary of imported and a few results
+            msg = f'Imported {imported} channels. Ran {len(results)} checks.\n\nSample results:\n'
+            for r in results[:5]:
+                msg += f"{r['name']}: {r['result']} ({r['notes']})\n"
+            dlg = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, msg)
+            dlg.run(); dlg.destroy()
+
+    async def _import_and_run(self, url):
+        # fetch M3U and parse
+        import aiohttp
+        from .worker import fetch_text, parse_m3u, Monitor
+        from .db import add_channels_bulk
+        async with aiohttp.ClientSession() as session:
+            txt = await fetch_text(session, url)
+            items = await parse_m3u(txt)
+        if not items:
+            return [], 0
+        await add_channels_bulk(items)
+        # run one check pass
+        mon = Monitor(None, interval=DEFAULTS['check_interval_sec'])
+        results = await mon.run_once()
+        return results, len(items)
 
         # initialize DB and load
         threading.Thread(target=self._init_async).start()

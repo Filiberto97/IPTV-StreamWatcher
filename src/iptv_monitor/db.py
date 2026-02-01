@@ -31,8 +31,33 @@ async def init_db():
 
 async def add_channel(name, url):
     async with aiosqlite.connect(DB_FILE) as db:
+        # avoid duplicate by url
+        cur = await db.execute('SELECT id FROM channels WHERE url = ?', (url,))
+        row = await cur.fetchone()
+        if row:
+            return row[0]
         await db.execute('INSERT INTO channels (name, url) VALUES (?,?)', (name, url))
         await db.commit()
+        cur = await db.execute('SELECT last_insert_rowid()')
+        r = await cur.fetchone()
+        return r[0]
+
+async def add_channels_bulk(ch_list):
+    """ch_list: iterable of (name,url) - adds if not present, returns list of ids"""
+    ids = []
+    async with aiosqlite.connect(DB_FILE) as db:
+        for name, url in ch_list:
+            cur = await db.execute('SELECT id FROM channels WHERE url = ?', (url,))
+            row = await cur.fetchone()
+            if row:
+                ids.append(row[0])
+                continue
+            await db.execute('INSERT INTO channels (name, url) VALUES (?,?)', (name, url))
+            await db.commit()
+            cur = await db.execute('SELECT last_insert_rowid()')
+            r = await cur.fetchone()
+            ids.append(r[0])
+    return ids
 
 async def list_channels():
     async with aiosqlite.connect(DB_FILE) as db:

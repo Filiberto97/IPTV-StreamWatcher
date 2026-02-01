@@ -17,6 +17,30 @@ async def fetch_bytes(session, url, timeout=15):
     elapsed = time.time() - start
     return len(data), elapsed
 
+async def parse_m3u(text):
+    """Parse a plain M3U playlist and return list of (name,url)"""
+    lines = [l.strip() for l in text.splitlines()]
+    items = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if line.startswith('#EXTINF'):
+            name = line.split(',', 1)[1] if ',' in line else 'unknown'
+            # next non-empty non-comment is URL
+            j = i + 1
+            while j < len(lines) and (not lines[j] or lines[j].startswith('#')):
+                j += 1
+            url = lines[j] if j < len(lines) else None
+            if url:
+                items.append((name, url))
+            i = j
+        i += 1
+    return items
+
+async def fetch_m3u(session, url):
+    txt = await fetch_text(session, url)
+    return await parse_m3u(txt)
+
 async def check_hls(url):
     async with aiohttp.ClientSession() as session:
         try:
@@ -67,6 +91,18 @@ class Monitor:
             if tasks:
                 await asyncio.gather(*tasks)
             await asyncio.sleep(self.interval)
+
+    async def run_once(self):
+        """Run a single pass over all channels and return a list of results."""
+        from .db import list_channels
+        channels = await list_channels()
+        results = []
+        for c in channels:
+            cid, name, url = c
+            result, notes, throughput, startup = await check_hls(url)
+            await insert_result(cid, result, notes, throughput, startup)
+            results.append({'id': cid, 'name': name, 'url': url, 'result': result, 'notes': notes, 'throughput': throughput, 'startup': startup})
+        return results
 
     def start(self):
         if self._task and not self._task.done():

